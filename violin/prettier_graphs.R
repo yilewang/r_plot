@@ -1,17 +1,15 @@
-#library(reticulate)
 library(ggplot2)
 library(readxl)
 library(PTCA4CATA)
 library(Hmisc)
 library(grid)
-#library(ggpubr)
 
-grp <- c(1,2,3,4)
-violin_plot <- function(file_name="Ignition-NEW-4-Yile.xlsx", sheet_name="ROI-Ignition Group", y_name="Ignition", title = "Plot of Ignition between groups", alpha = 0.5, order =2){
+grp <- c(1,2,3,4) # how many groups
+violin_plot <- function(file_name=YOUR_FILE, sheet_name=YOUR_FILE, y_name=COLUMMN_YOU_WANT_TO_PLOT, title =PLOT_TITLE, alpha = 0.5, order =2){
   G <- read_excel(file_name, sheet = sheet_name)
-  G_means <- aggregate(x = as.matrix(G[,y_name]), by = G[,"groups"], FUN = mean)
+  G_means <- aggregate(x = as.matrix(G[,y_name]), by = G[,"groups"], FUN = mean) # groups is used as index, included in your dataframe
   model <- lm(get(y_name) ~ poly(grp, order, raw = TRUE),  
-              data = G_means) # Make predictions 
+              data = G_means)
   sum_model <- summary(model)
   r2 <- bquote(R^2 ~ "= "~ .(round(sum_model$r.squared,3)))
   if(order ==2){
@@ -66,21 +64,5 @@ violin_plot <- function(file_name="Ignition-NEW-4-Yile.xlsx", sheet_name="ROI-Ig
   dev.off()
 }
 violin_plot()
-violin_plot(sheet_name = "Integration", y_name = "Integration", title = "Plot of Integration between groups", alpha = 0.2)
-violin_plot(sheet_name = "Ignition_pCNG_R", y_name = "Ignition_pCNG", title = "Plot of Ignition of pCNG between groups", order = 1)
-violin_plot(sheet_name = "Ignition_whole_brain", y_name = "Ignition_whole_brain", title = "Plot of Whole Brain level of Ignition between groups", alpha = 0.2)
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "Go", y_name = "Go", title = "Plot of Go between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "Gc", y_name = "Gc", title = "Plot of Gc between groups", order = 1)
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "Gmax", y_name = "Gmax", title = "Plot of Gmax between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "Gmax_Gc", y_name = "Gmax_Gc", title = "Plot of Gmax-Gc between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "Go_Gc", y_name = "Go_Gc", title = "Plot of Go-Gc between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "amplitude", y_name = "amp_gamma_right", title = "Plot of gamma amplitude on right sidebetween groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "amplitude", y_name = "amp_theta_right", title = "Plot of theta amplitude on right side between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "freq", y_name = "freq_gamma_right", title = "Plot of gamma frequency on right side between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "freq", y_name = "freq_theta_right", title = "Plot of theta frequency on right side between groups")
-violin_plot(file_name = "table_solodkin_332021.xlsx", sheet_name = "freq", y_name = "freq_gamma_over_theta_right", title = "Plot of gamme/theta frequency on right side between groups")
-
-
-
 
 
